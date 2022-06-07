@@ -1,0 +1,51 @@
+(env) ➜  jobapp python3 manage.py makemigrations
+It is impossible to add a non-nullable field 'author' to jobpost without specifying a default. This is because the database needs something to populate existing rows.
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit and manually define a default value in models.py.
+Select an option: ^CTraceback (most recent call last):
+  File "/Users/faisal/Source code/django/djlpa/jobapp/manage.py", line 22, in <module>
+    main()
+  File "/Users/faisal/Source code/django/djlpa/jobapp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/__init__.py", line 425, in execute_from_command_line
+    utility.execute()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/base.py", line 373, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/base.py", line 417, in execute
+    output = self.handle(*args, **options)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/base.py", line 90, in wrapped
+    res = handle_func(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/core/management/commands/makemigrations.py", line 172, in handle
+    changes = autodetector.changes(
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/migrations/autodetector.py", line 43, in changes
+    changes = self._detect_changes(convert_apps, graph)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/migrations/autodetector.py", line 188, in _detect_changes
+    self.generate_added_fields()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/migrations/autodetector.py", line 863, in generate_added_fields
+    self._generate_added_field(app_label, model_name, field_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/migrations/autodetector.py", line 886, in _generate_added_field
+    field.default = self.questioner.ask_not_null_addition(field_name, model_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/migrations/questioner.py", line 148, in ask_no
+(env) ➜  jobapp python3 manage.py makemigrations
+Migrations for 'app':
+  app/migrations/0006_author_jobpost_author.py
+    - Create model Author
+    - Add field author to jobpost
+(env) ➜  jobapp python3 manage.py migrate       
+Operations to perform:
+  Apply all migrations: admin, app, auth, contenttypes, sessions
+Running migrations:
+  Applying app.0006_author_jobpost_author... OK
+(env) ➜  jobapp python3 manage.py shell  
+/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/IPython/core/interactiveshell.py:802: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
+  warn(
+Python 3.9.1 (v3.9.1:1e5d33e9b9, Dec  7 2020, 12:10:52) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.0.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from app.models import JobPost
+
+In [2]: 

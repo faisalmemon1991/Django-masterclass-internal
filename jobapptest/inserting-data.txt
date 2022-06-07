@@ -1,0 +1,24 @@
+source "/Users/faisal/Source code/django/djlpa/jobapptest/env/bin/activate"
+➜  jobapptest source "/Users/faisal/Source code/django/djlpa/jobapptest/env/bin/activate"
+(env) ➜  jobapptest python3 manage.py shell
+/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/IPython/core/interactiveshell.py:802: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
+  warn(
+Python 3.9.1 (v3.9.1:1e5d33e9b9, Dec  7 2020, 12:10:52) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.0.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from app.models import JobPost
+
+In [2]: jp1 = JobPost(title="First job post", description="Example", salary=5000)
+
+In [3]: jp1.save()
+
+In [4]: 
+
+
+
+
+
+
+
+ 

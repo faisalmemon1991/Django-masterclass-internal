@@ -1,0 +1,669 @@
+NameError             Traceback (most recent call last)
+Input In [25], in <module>
+----> 1 Authors.objects.get(name__contains="John")
+
+NameError: name 'Authors' is not defined
+
+In [26]: Author.objects.get(name__contains="John")
+Out[26]: <Author: Author object (1)>
+
+In [27]: Author.objects.get(name__contains="John").jobp
+    ...: ost_set.all()
+Out[27]: <QuerySet [<JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>]>
+
+In [28]: author_1.jobpost_set.create(
+    ...:     title="Nineth Job Post", description="test
+    ...: ing description", salary="2500"
+    ...: )
+-------------------------------------------------------
+ValueError            Traceback (most recent call last)
+Input In [28], in <module>
+----> 1 author_1.jobpost_set.create(
+      2     title="Nineth Job Post", description="testing description", salary="2500"
+      3 )
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/fields/related_descriptors.py:677, in create_reverse_many_to_one_manager.<locals>.RelatedManager.create(self, **kwargs)
+    675 kwargs[self.field.name] = self.instance
+    676 db = router.db_for_write(self.model, instance=self.instance)
+--> 677 return super(RelatedManager, self.db_manager(db)).create(**kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:457, in QuerySet.create(self, **kwargs)
+    455 obj = self.model(**kwargs)
+    456 self._for_write = True
+--> 457 obj.save(force_insert=True, using=self.db)
+    458 return obj
+
+File ~/Source code/django/djlpa/jobapptest/app/models.py:33, in JobPost.save(self, *args, **kwargs)
+     31 if not self.id:
+     32     self.slug = slugify(self.title)
+---> 33 return super(JobPost, self).save(args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:743, in Model.save(self, force_insert, force_update, using, update_fields)
+    740     if loaded_fields:
+    741         update_fields = frozenset(loaded_fields)
+--> 743 self.save_base(using=using, force_insert=force_insert,
+    744                force_update=force_update, update_fields=update_fields)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:780, in Model.save_base(self, raw, force_insert, force_update, using, update_fields)
+    778     if not raw:
+    779         parent_inserted = self._save_parents(cls, using, update_fields)
+--> 780     updated = self._save_table(
+    781         raw, cls, force_insert or parent_inserted,
+    782         force_update, using, update_fields,
+    783     )
+    784 # Store the database on which the object was saved
+    785 self._state.db = using
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:845, in Model._save_table(self, raw, cls, force_insert, force_update, using, update_fields)
+    843 pk_set = pk_val is not None
+    844 if not pk_set and (force_update or update_fields):
+--> 845     raise ValueError("Cannot force an update in save() with no primary key.")
+    846 updated = False
+    847 # Skip an UPDATE when adding an instance and primary key has a default.
+
+ValueError: Cannot force an update in save() with no primary key.
+
+In [29]: author_1.jobpost_set.create(
+    ...:     title="Nineth Job Post", description="test
+    ...: ing description", salary="2500"
+    ...: )
+-------------------------------------------------------
+ValueError            Traceback (most recent call last)
+Input In [29], in <module>
+----> 1 author_1.jobpost_set.create(
+      2     title="Nineth Job Post", description="testing description", salary="2500"
+      3 )
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/fields/related_descriptors.py:677, in create_reverse_many_to_one_manager.<locals>.RelatedManager.create(self, **kwargs)
+    675 kwargs[self.field.name] = self.instance
+    676 db = router.db_for_write(self.model, instance=self.instance)
+--> 677 return super(RelatedManager, self.db_manager(db)).create(**kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:457, in QuerySet.create(self, **kwargs)
+    455 obj = self.model(**kwargs)
+    456 self._for_write = True
+--> 457 obj.save(force_insert=True, using=self.db)
+    458 return obj
+
+File ~/Source code/django/djlpa/jobapptest/app/models.py:33, in JobPost.save(self, *args, **kwargs)
+     31 if not self.id:
+     32     self.slug = slugify(self.title)
+---> 33 return super(JobPost, self).save(args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:743, in Model.save(self, force_insert, force_update, using, update_fields)
+    740     if loaded_fields:
+    741         update_fields = frozenset(loaded_fields)
+--> 743 self.save_base(using=using, force_insert=force_insert,
+    744                force_update=force_update, update_fields=update_fields)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:780, in Model.save_base(self, raw, force_insert, force_update, using, update_fields)
+    778     if not raw:
+    779         parent_inserted = self._save_parents(cls, using, update_fields)
+--> 780     updated = self._save_table(
+    781         raw, cls, force_insert or parent_inserted,
+    782         force_update, using, update_fields,
+    783     )
+    784 # Store the database on which the object was saved
+    785 self._state.db = using
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:845, in Model._save_table(self, raw, cls, force_insert, force_update, using, update_fields)
+    843 pk_set = pk_val is not None
+    844 if not pk_set and (force_update or update_fields):
+--> 845     raise ValueError("Cannot force an update in save() with no primary key.")
+    846 updated = False
+    847 # Skip an UPDATE when adding an instance and primary key has a default.
+
+ValueError: Cannot force an update in save() with no primary key.
+
+In [30]: author_1.jobpost_set.create(
+    ...:     title="Nineth Job Post", description="test
+    ...: ing description", salary="2500"
+    ...: )
+-------------------------------------------------------
+ValueError            Traceback (most recent call last)
+Input In [30], in <module>
+----> 1 author_1.jobpost_set.create(
+      2     title="Nineth Job Post", description="testing description", salary="2500"
+      3 )
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/fields/related_descriptors.py:677, in create_reverse_many_to_one_manager.<locals>.RelatedManager.create(self, **kwargs)
+    675 kwargs[self.field.name] = self.instance
+    676 db = router.db_for_write(self.model, instance=self.instance)
+--> 677 return super(RelatedManager, self.db_manager(db)).create(**kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:457, in QuerySet.create(self, **kwargs)
+    455 obj = self.model(**kwargs)
+    456 self._for_write = True
+--> 457 obj.save(force_insert=True, using=self.db)
+    458 return obj
+
+File ~/Source code/django/djlpa/jobapptest/app/models.py:33, in JobPost.save(self, *args, **kwargs)
+     31 if not self.id:
+     32     self.slug = slugify(self.title)
+---> 33 return super(JobPost, self).save(args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:743, in Model.save(self, force_insert, force_update, using, update_fields)
+    740     if loaded_fields:
+    741         update_fields = frozenset(loaded_fields)
+--> 743 self.save_base(using=using, force_insert=force_insert,
+    744                force_update=force_update, update_fields=update_fields)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:780, in Model.save_base(self, raw, force_insert, force_update, using, update_fields)
+    778     if not raw:
+    779         parent_inserted = self._save_parents(cls, using, update_fields)
+--> 780     updated = self._save_table(
+    781         raw, cls, force_insert or parent_inserted,
+    782         force_update, using, update_fields,
+    783     )
+    784 # Store the database on which the object was saved
+    785 self._state.db = using
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/base.py:845, in Model._save_table(self, raw, cls, force_insert, force_update, using, update_fields)
+    843 pk_set = pk_val is not None
+    844 if not pk_set and (force_update or update_fields):
+--> 845     raise ValueError("Cannot force an update in save() with no primary key.")
+    846 updated = False
+    847 # Skip an UPDATE when adding an instance and primary key has a default.
+
+ValueError: Cannot force an update in save() with no primary key.
+
+In [31]: exit()
+(env) ➜  jobapptest python3 manage.py shell
+/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/IPython/core/interactiveshell.py:802: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
+  warn(
+Python 3.9.1 (v3.9.1:1e5d33e9b9, Dec  7 2020, 12:10:52) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.0.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from app.models import JobPost, Location, Autho
+   ...: r
+
+In [2]: author_1 = Author.objects.get(name__contains="J
+   ...: ohn")
+
+In [3]: author_1
+Out[3]: <Author: Author object (1)>
+
+In [4]: author_1.jobpost_set.create(
+   ...:     title="Nineth Job Post", description="testi
+   ...: ng description", salary="2500"
+   ...: )
+Out[4]: <JobPost: Nineth Job Post with salary 2500>
+
+In [5]: author_1.jobpost_set.author.id
+-------------------------------------------------------
+AttributeError        Traceback (most recent call last)
+Input In [5], in <module>
+----> 1 author_1.jobpost_set.author.id
+
+AttributeError: 'RelatedManager' object has no attribute 'author'
+
+In [6]: job_post_9 = JobPost.objects.get(title__contain
+   ...: s="Nineth")
+
+In [7]: job_post_8.author.id
+-------------------------------------------------------
+NameError             Traceback (most recent call last)
+Input In [7], in <module>
+----> 1 job_post_8.author.id
+
+NameError: name 'job_post_8' is not defined
+
+In [8]: job_post_9.author.id
+Out[8]: 1
+
+In [9]: author_1.jobpost_set.add(job_post_9)
+
+In [10]: job_post_1 = JobPost.objects.get(title__contai
+    ...: ns="First")
+
+In [11]: job_post_1
+Out[11]: <JobPost: First job post with salary 5000>
+
+In [12]: author_1.jobpost_set.add(job_post_1)
+
+In [13]: JobPost.objects.get(title__contains="First").a
+    ...: uthor.name
+Out[13]: 'John Carter'
+
+In [14]: author_1.name
+Out[14]: 'John Carter'
+
+In [15]: author_2 = Author.objects.get(id=2)
+
+In [16]: author_2.name
+Out[16]: 'Stacy Goldberg'
+
+In [17]: author_1.jobpost_set.add(job_post_2)
+-------------------------------------------------------
+NameError             Traceback (most recent call last)
+Input In [17], in <module>
+----> 1 author_1.jobpost_set.add(job_post_2)
+
+NameError: name 'job_post_2' is not defined
+
+In [18]: author_2.jobpost_set.add(job_post_1)
+
+In [19]: author_2.save()
+
+In [20]: author_1.jobpost_set.add(job_post_1)
+
+In [21]: author_1.jobpost_set.count()
+Out[21]: 4
+
+In [22]: author_1.jobpost_set.all()
+Out[22]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [23]: author_1.jobpost_set.filter(title__contains="F
+    ...: irst")
+Out[23]: <QuerySet [<JobPost: First job post with salary 5000>]>
+
+In [24]: JobPost.objects.filter(author__name="John cart
+    ...: er")
+Out[24]: <QuerySet []>
+
+In [25]: JobPost.objects.filter(author__name="John Cart
+    ...: er")
+Out[25]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [26]: JobPost.objects.filter(author__name_contains="
+    ...: John")
+-------------------------------------------------------
+FieldError            Traceback (most recent call last)
+Input In [26], in <module>
+----> 1 JobPost.objects.filter(author__name_contains="John")
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:974, in QuerySet.filter(self, *args, **kwargs)
+    969 """
+    970 Return a new QuerySet instance with the args ANDed to the existing
+    971 set.
+    972 """
+    973 self._not_support_combined_queries('filter')
+--> 974 return self._filter_or_exclude(False, args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:992, in QuerySet._filter_or_exclude(self, negate, args, kwargs)
+    990     clone._deferred_filter = negate, args, kwargs
+    991 else:
+--> 992     clone._filter_or_exclude_inplace(negate, args, kwargs)
+    993 return clone
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:999, in QuerySet._filter_or_exclude_inplace(self, negate, args, kwargs)
+    997     self._query.add_q(~Q(*args, **kwargs))
+    998 else:
+--> 999     self._query.add_q(Q(*args, **kwargs))
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1375, in Query.add_q(self, q_object)
+   1368 # For join promotion this case is doing an AND for the added q_object
+   1369 # and existing conditions. So, any existing inner join forces the join
+   1370 # type to remain inner. Existing outer joins can however be demoted.
+   1371 # (Consider case where rel_a is LOUTER and rel_a__col=1 is added - if
+   1372 # rel_a doesn't produce any rows, then the whole condition must fail.
+   1373 # So, demotion is OK.
+   1374 existing_inner = {a for a in self.alias_map if self.alias_map[a].join_type == INNER}
+-> 1375 clause, _ = self._add_q(q_object, self.used_aliases)
+   1376 if clause:
+   1377     self.where.add(clause, AND)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1396, in Query._add_q(self, q_object, used_aliases, branch_negated, current_negated, allow_joins, split_subq, check_filterable)
+   1394 joinpromoter = JoinPromoter(q_object.connector, len(q_object.children), current_negated)
+   1395 for child in q_object.children:
+-> 1396     child_clause, needed_inner = self.build_filter(
+   1397         child, can_reuse=used_aliases, branch_negated=branch_negated,
+   1398         current_negated=current_negated, allow_joins=allow_joins,
+   1399         split_subq=split_subq, check_filterable=check_filterable,
+   1400     )
+   1401     joinpromoter.add_votes(needed_inner)
+   1402     if child_clause:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1329, in Query.build_filter(self, filter_expr, branch_negated, current_negated, can_reuse, allow_joins, split_subq, check_filterable)
+   1326 else:
+   1327     col = self._get_col(targets[0], join_info.final_field, alias)
+-> 1329 condition = self.build_lookup(lookups, col, value)
+   1330 lookup_type = condition.lookup_name
+   1331 clause = WhereNode([condition], connector=AND)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1171, in Query.build_lookup(self, lookups, lhs, rhs)
+   1169 if not lookup_class:
+   1170     if lhs.field.is_relation:
+-> 1171         raise FieldError('Related Field got invalid lookup: {}'.format(lookup_name))
+   1172     # A lookup wasn't found. Try to interpret the name as a transform
+   1173     # and do an Exact lookup against it.
+   1174     lhs = self.try_transform(lhs, lookup_name)
+
+FieldError: Related Field got invalid lookup: name_contains
+
+In [27]: JobPost.objects.filter(author__name__contains=
+    ...: "John")
+Out[27]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [28]: JobPost.objects.filter(author__name__contains=
+    ...: "John", designation="Hiring manager"")
+  Input In [28]
+    JobPost.objects.filter(author__name__contains="John", designation="Hiring manager"")
+                                                                                        ^
+SyntaxError: EOL while scanning string literal
+
+
+In [29]: JobPost.objects.filter(author__name__contains=
+    ...: "John", designation="Hiring manager")
+-------------------------------------------------------
+FieldError            Traceback (most recent call last)
+Input In [29], in <module>
+----> 1 JobPost.objects.filter(author__name__contains="John", designation="Hiring manager")
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:974, in QuerySet.filter(self, *args, **kwargs)
+    969 """
+    970 Return a new QuerySet instance with the args ANDed to the existing
+    971 set.
+    972 """
+    973 self._not_support_combined_queries('filter')
+--> 974 return self._filter_or_exclude(False, args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:992, in QuerySet._filter_or_exclude(self, negate, args, kwargs)
+    990     clone._deferred_filter = negate, args, kwargs
+    991 else:
+--> 992     clone._filter_or_exclude_inplace(negate, args, kwargs)
+    993 return clone
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:999, in QuerySet._filter_or_exclude_inplace(self, negate, args, kwargs)
+    997     self._query.add_q(~Q(*args, **kwargs))
+    998 else:
+--> 999     self._query.add_q(Q(*args, **kwargs))
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1375, in Query.add_q(self, q_object)
+   1368 # For join promotion this case is doing an AND for the added q_object
+   1369 # and existing conditions. So, any existing inner join forces the join
+   1370 # type to remain inner. Existing outer joins can however be demoted.
+   1371 # (Consider case where rel_a is LOUTER and rel_a__col=1 is added - if
+   1372 # rel_a doesn't produce any rows, then the whole condition must fail.
+   1373 # So, demotion is OK.
+   1374 existing_inner = {a for a in self.alias_map if self.alias_map[a].join_type == INNER}
+-> 1375 clause, _ = self._add_q(q_object, self.used_aliases)
+   1376 if clause:
+   1377     self.where.add(clause, AND)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1396, in Query._add_q(self, q_object, used_aliases, branch_negated, current_negated, allow_joins, split_subq, check_filterable)
+   1394 joinpromoter = JoinPromoter(q_object.connector, len(q_object.children), current_negated)
+   1395 for child in q_object.children:
+-> 1396     child_clause, needed_inner = self.build_filter(
+   1397         child, can_reuse=used_aliases, branch_negated=branch_negated,
+   1398         current_negated=current_negated, allow_joins=allow_joins,
+   1399         split_subq=split_subq, check_filterable=check_filterable,
+   1400     )
+   1401     joinpromoter.add_votes(needed_inner)
+   1402     if child_clause:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1271, in Query.build_filter(self, filter_expr, branch_negated, current_negated, can_reuse, allow_joins, split_subq, check_filterable)
+   1269 if not arg:
+   1270     raise FieldError("Cannot parse keyword query %r" % arg)
+-> 1271 lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+   1273 if check_filterable:
+   1274     self.check_filterable(reffed_expression)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1099, in Query.solve_lookup_type(self, lookup)
+   1097     if expression:
+   1098         return expression_lookups, (), expression
+-> 1099 _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+   1100 field_parts = lookup_splitted[0:len(lookup_splitted) - len(lookup_parts)]
+   1101 if len(lookup_parts) > 1 and not field_parts:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1522, in Query.names_to_path(self, names, opts, allow_many, fail_on_missing)
+   1516     if pos == -1 or fail_on_missing:
+   1517         available = sorted([
+   1518             *get_field_names_from_opts(opts),
+   1519             *self.annotation_select,
+   1520             *self._filtered_relations,
+   1521         ])
+-> 1522         raise FieldError("Cannot resolve keyword '%s' into field. "
+   1523                          "Choices are: %s" % (name, ", ".join(available)))
+   1524     break
+   1525 # Check if we need any joins for concrete inheritance cases (the
+   1526 # field lives in parent, but we are currently in one of its
+   1527 # children)
+
+FieldError: Cannot resolve keyword 'designation' into field. Choices are: author, author_id, date, description, expiry, id, location, location_id, salary, slug, title
+
+In [30]: JobPost.objects.filter(author__name__contains=
+    ...: "John", author__designation="Hiring manager")
+Out[30]: <QuerySet []>
+
+In [31]: author_1.id
+Out[31]: 1
+
+In [32]: JobPost.objects.filter(author__id=1)
+Out[32]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [33]: JobPost.objects.filter(author__pk=1)
+Out[33]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [34]: JobPost.objects.filter(author=author_1)
+Out[34]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [35]: JobPost.objects.filter(author__id in [1,2])
+-------------------------------------------------------
+NameError             Traceback (most recent call last)
+Input In [35], in <module>
+----> 1 JobPost.objects.filter(author__id in [1,2])
+
+NameError: name 'author__id' is not defined
+
+In [36]: JobPost.objects.filter(author__in [1,2])
+-------------------------------------------------------
+NameError             Traceback (most recent call last)
+Input In [36], in <module>
+----> 1 JobPost.objects.filter(author__in [1,2])
+
+NameError: name 'author__in' is not defined
+
+In [37]: JobPost.objects.filter(author__in=[1,2])
+Out[37]: <QuerySet [<JobPost: First job post with salary 5000>, <JobPost: Sixth job post with salary 15000>, <JobPost: Eighth job post with salary 13500>, <JobPost: Nineth Job Post with salary 2500>]>
+
+In [38]: Author.objects.filter(jobpost_id=1)
+-------------------------------------------------------
+FieldError            Traceback (most recent call last)
+Input In [38], in <module>
+----> 1 Author.objects.filter(jobpost_id=1)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:974, in QuerySet.filter(self, *args, **kwargs)
+    969 """
+    970 Return a new QuerySet instance with the args ANDed to the existing
+    971 set.
+    972 """
+    973 self._not_support_combined_queries('filter')
+--> 974 return self._filter_or_exclude(False, args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:992, in QuerySet._filter_or_exclude(self, negate, args, kwargs)
+    990     clone._deferred_filter = negate, args, kwargs
+    991 else:
+--> 992     clone._filter_or_exclude_inplace(negate, args, kwargs)
+    993 return clone
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:999, in QuerySet._filter_or_exclude_inplace(self, negate, args, kwargs)
+    997     self._query.add_q(~Q(*args, **kwargs))
+    998 else:
+--> 999     self._query.add_q(Q(*args, **kwargs))
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1375, in Query.add_q(self, q_object)
+   1368 # For join promotion this case is doing an AND for the added q_object
+   1369 # and existing conditions. So, any existing inner join forces the join
+   1370 # type to remain inner. Existing outer joins can however be demoted.
+   1371 # (Consider case where rel_a is LOUTER and rel_a__col=1 is added - if
+   1372 # rel_a doesn't produce any rows, then the whole condition must fail.
+   1373 # So, demotion is OK.
+   1374 existing_inner = {a for a in self.alias_map if self.alias_map[a].join_type == INNER}
+-> 1375 clause, _ = self._add_q(q_object, self.used_aliases)
+   1376 if clause:
+   1377     self.where.add(clause, AND)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1396, in Query._add_q(self, q_object, used_aliases, branch_negated, current_negated, allow_joins, split_subq, check_filterable)
+   1394 joinpromoter = JoinPromoter(q_object.connector, len(q_object.children), current_negated)
+   1395 for child in q_object.children:
+-> 1396     child_clause, needed_inner = self.build_filter(
+   1397         child, can_reuse=used_aliases, branch_negated=branch_negated,
+   1398         current_negated=current_negated, allow_joins=allow_joins,
+   1399         split_subq=split_subq, check_filterable=check_filterable,
+   1400     )
+   1401     joinpromoter.add_votes(needed_inner)
+   1402     if child_clause:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1271, in Query.build_filter(self, filter_expr, branch_negated, current_negated, can_reuse, allow_joins, split_subq, check_filterable)
+   1269 if not arg:
+   1270     raise FieldError("Cannot parse keyword query %r" % arg)
+-> 1271 lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+   1273 if check_filterable:
+   1274     self.check_filterable(reffed_expression)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1099, in Query.solve_lookup_type(self, lookup)
+   1097     if expression:
+   1098         return expression_lookups, (), expression
+-> 1099 _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+   1100 field_parts = lookup_splitted[0:len(lookup_splitted) - len(lookup_parts)]
+   1101 if len(lookup_parts) > 1 and not field_parts:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1522, in Query.names_to_path(self, names, opts, allow_many, fail_on_missing)
+   1516     if pos == -1 or fail_on_missing:
+   1517         available = sorted([
+   1518             *get_field_names_from_opts(opts),
+   1519             *self.annotation_select,
+   1520             *self._filtered_relations,
+   1521         ])
+-> 1522         raise FieldError("Cannot resolve keyword '%s' into field. "
+   1523                          "Choices are: %s" % (name, ", ".join(available)))
+   1524     break
+   1525 # Check if we need any joins for concrete inheritance cases (the
+   1526 # field lives in parent, but we are currently in one of its
+   1527 # children)
+
+FieldError: Cannot resolve keyword 'jobpost_id' into field. Choices are: company, designation, id, jobpost, name
+
+In [39]: Author.objects.filter(jobpost__id=1)
+Out[39]: <QuerySet [<Author: Author object (1)>]>
+
+In [40]: Author.objects.filter(jobpost=1)
+Out[40]: <QuerySet [<Author: Author object (1)>]>
+
+In [41]: Author.objects.filter(jobpost_pk=1)
+-------------------------------------------------------
+FieldError            Traceback (most recent call last)
+Input In [41], in <module>
+----> 1 Author.objects.filter(jobpost_pk=1)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/manager.py:85, in BaseManager._get_queryset_methods.<locals>.create_method.<locals>.manager_method(self, *args, **kwargs)
+     84 def manager_method(self, *args, **kwargs):
+---> 85     return getattr(self.get_queryset(), name)(*args, **kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:974, in QuerySet.filter(self, *args, **kwargs)
+    969 """
+    970 Return a new QuerySet instance with the args ANDed to the existing
+    971 set.
+    972 """
+    973 self._not_support_combined_queries('filter')
+--> 974 return self._filter_or_exclude(False, args, kwargs)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:992, in QuerySet._filter_or_exclude(self, negate, args, kwargs)
+    990     clone._deferred_filter = negate, args, kwargs
+    991 else:
+--> 992     clone._filter_or_exclude_inplace(negate, args, kwargs)
+    993 return clone
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/query.py:999, in QuerySet._filter_or_exclude_inplace(self, negate, args, kwargs)
+    997     self._query.add_q(~Q(*args, **kwargs))
+    998 else:
+--> 999     self._query.add_q(Q(*args, **kwargs))
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1375, in Query.add_q(self, q_object)
+   1368 # For join promotion this case is doing an AND for the added q_object
+   1369 # and existing conditions. So, any existing inner join forces the join
+   1370 # type to remain inner. Existing outer joins can however be demoted.
+   1371 # (Consider case where rel_a is LOUTER and rel_a__col=1 is added - if
+   1372 # rel_a doesn't produce any rows, then the whole condition must fail.
+   1373 # So, demotion is OK.
+   1374 existing_inner = {a for a in self.alias_map if self.alias_map[a].join_type == INNER}
+-> 1375 clause, _ = self._add_q(q_object, self.used_aliases)
+   1376 if clause:
+   1377     self.where.add(clause, AND)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1396, in Query._add_q(self, q_object, used_aliases, branch_negated, current_negated, allow_joins, split_subq, check_filterable)
+   1394 joinpromoter = JoinPromoter(q_object.connector, len(q_object.children), current_negated)
+   1395 for child in q_object.children:
+-> 1396     child_clause, needed_inner = self.build_filter(
+   1397         child, can_reuse=used_aliases, branch_negated=branch_negated,
+   1398         current_negated=current_negated, allow_joins=allow_joins,
+   1399         split_subq=split_subq, check_filterable=check_filterable,
+   1400     )
+   1401     joinpromoter.add_votes(needed_inner)
+   1402     if child_clause:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1271, in Query.build_filter(self, filter_expr, branch_negated, current_negated, can_reuse, allow_joins, split_subq, check_filterable)
+   1269 if not arg:
+   1270     raise FieldError("Cannot parse keyword query %r" % arg)
+-> 1271 lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+   1273 if check_filterable:
+   1274     self.check_filterable(reffed_expression)
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1099, in Query.solve_lookup_type(self, lookup)
+   1097     if expression:
+   1098         return expression_lookups, (), expression
+-> 1099 _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+   1100 field_parts = lookup_splitted[0:len(lookup_splitted) - len(lookup_parts)]
+   1101 if len(lookup_parts) > 1 and not field_parts:
+
+File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/django/db/models/sql/query.py:1522, in Query.names_to_path(self, names, opts, allow_many, fail_on_missing)
+   1516     if pos == -1 or fail_on_missing:
+   1517         available = sorted([
+   1518             *get_field_names_from_opts(opts),
+   1519             *self.annotation_select,
+   1520             *self._filtered_relations,
+   1521         ])
+-> 1522         raise FieldError("Cannot resolve keyword '%s' into field. "
+   1523                          "Choices are: %s" % (name, ", ".join(available)))
+   1524     break
+   1525 # Check if we need any joins for concrete inheritance cases (the
+   1526 # field lives in parent, but we are currently in one of its
+   1527 # children)
+
+FieldError: Cannot resolve keyword 'jobpost_pk' into field. Choices are: company, designation, id, jobpost, name
+
+In [42]: Author.objects.filter(jobpost__pk=1)
+Out[42]: <QuerySet [<Author: Author object (1)>]>
+
+In [43]: Author.objects.filter(jobpost=job_post_1)
+Out[43]: <QuerySet [<Author: Author object (1)>]>
+
+In [44]: Author.objects.filter(jobpost__title="First jo
+    ...: b post")
+Out[44]: <QuerySet [<Author: Author object (1)>]>
+
+In [45]: Author.objects.filter(jobpost__title__contains
+    ...: ="First")
+Out[45]: <QuerySet [<Author: Author object (1)>]>
+
+In [46]: Author.objects.filter(jobpost__title__contains
+    ...: ="First").count()
+Out[46]: 1
+
+In [47]: 

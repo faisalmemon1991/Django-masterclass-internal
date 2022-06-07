@@ -1,0 +1,92 @@
+NOTE : if you make any changes in model and then migrate you won't see field accessible you have to exit and come again
+ONE-TO-ONE
+In [1]: from app.models import JobPost, Location
+In [2]: jp1 = JobPost(title="First job post", description="Example")
+In [3]: jp1.save()
+In [7]: l1 = Location(street="abc", city="adelaide", state="California", zip="42780")
+In [8]: l1.save()
+In [9]: jp1.location = l1
+In [10]: jp1.save()
+In [11]: jp1.location
+Out[11]: <Location: Location object (1)>
+
+In [12]: l1.jobpost
+Out[12]: <JobPost: JobPost object (1)>
+
+# you get error for following because location l1 is already mapped to jp1
+jp2 = JobPost(title="Second job post", description="Example", location=l1)
+
+# Create another location and save
+In [15]: l2 = Location(street="xyz", city="New York", state="New York", zip="96832")
+In [16]: l2.save()
+In [17]: jp2 = JobPost(title="Second job post", description="Example", location=l2)
+In [18]: jp2.save()
+
+# Getting all JobPosts
+In [2]: jp = JobPost.objects.all()
+In [4]: jp[0].salary = 3000
+In [5]: jp[1].salary = 5000
+In [6]: jp[1].save()
+In [7]: jp[0].save()
+
+#Order by clause
+In [14]: JobPost.objects.order_by("title")
+Out[14]: <QuerySet [<JobPost: First job post>, <JobPost: Second job post>]>
+
+In [15]: JobPost.objects.order_by("-title")
+Out[15]: <QuerySet [<JobPost: Second job post>, <JobPost: First job post>]>
+
+# Getting Jobs by Location
+In [19]: JobPost.objects.get(title="Second job post")
+Out[19]: <JobPost: Second job post>
+
+In [20]: JobPost.objects.get(location=l1)
+Out[20]: <JobPost: First job post>
+
+# Filtering JobPosts using street
+In [21]: JobPost.objects.get(location__street__startswith = "a")
+Out[21]: <JobPost: First job post>
+
+
+# Reverse querying via Location
+In [22]: Location.objects.get(jobpost__location=l1)
+Out[22]: <Location: abc>
+
+# Reverse : getting location via jobpost
+In [26]: Location.objects.get(jobpost=jp1)
+Out[26]: <Location: abc>
+
+In [27]: Location.objects.get(jobpost__title__startswith="First")
+Out[27]: <Location: abc>
+
+In [29]: Location.objects.get(jobpost__location__street__contains="a")
+Out[29]: <Location: abc>
+
+
+
+# Models Structure
+from django.db import models
+
+class Location(models.Model):
+    street = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    country = models.CharField(max_length=200)
+    zip = models.CharField(max_length=200)
+    def __str__(self):
+        return self.street
+
+class JobPost(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    location = models.OneToOneField(Location, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return self.title
+
+
+
+EXECUTE FOLLOWING ON : https://sqliteonline.com/
+select * from app_jobpost;
+select * from app_location;
