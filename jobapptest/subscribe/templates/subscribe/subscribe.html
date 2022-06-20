@@ -4,15 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h1{
+            color: red;
+        }
+    </style>
     <title>Subscribe Form</title>
 </head>
 <body>
+    <h1>Subscribe Form</h1>
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="Submit">
     </form>
 
+    <button onclick="popup()">Click me</button>
+    <script>
+        function popup() {
+          alert("Hey! I am your alert box.");
+        }
+        </script>
 <!-- <form method="POST">
     {% for field in form %}
     <div class="subscribe_field">
