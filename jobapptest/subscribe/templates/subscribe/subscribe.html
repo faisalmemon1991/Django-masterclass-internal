@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'subscribe/main.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscribe Form</title>
 </head>
 <body>
-    <h1>Subscribe Form</h1>
+    
+    <h1><img src="{% static 'subscribe/email-icon.png' %}" alt="subscribe" width="20px">Subscribe Form</h1>
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
@@ -17,11 +18,8 @@
     </form>
 
     <button onclick="popup()">Click me</button>
-    <script>
-        function popup() {
-          alert("Hey! I am your alert box.");
-        }
-        </script>
+    <script src="{% static 'main.js' %}"></script>
+
 <!-- <form method="POST">
     {% for field in form %}
     <div class="subscribe_field">
