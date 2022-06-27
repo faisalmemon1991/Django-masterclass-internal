@@ -90,7 +90,7 @@ img {
   margin-top: 3em;
   display: grid;
   align-items: center;
-  grid-template-columns: 8fr 4fr;
+  grid-template-columns: 8fr 2fr;
   border-bottom: 3px solid var(--lblue);
 }
 .menu {
@@ -98,7 +98,7 @@ img {
 }
 .buttons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 20px;
 }
 
@@ -293,6 +293,24 @@ button{
     border-radius: 8px;
     margin-top: 3em;
     width: 50%;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) 
+  }
+
+  .email-form-title{
+    color: #f5f6f5;
+    font-size: 300%;
+    text-align: center;
+  }
+
+  .email-form-title-success{
+    color: yellow;
+    font-size: 300%;
+    text-align: center;
+    display: none;
   }
 
   .email-submit{
