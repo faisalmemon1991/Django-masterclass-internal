@@ -27,6 +27,7 @@ nav {
 }
 a {
   text-decoration: none;
+  color: white;
 }
 .container {
   max-width: 1200px;
@@ -294,7 +295,7 @@ button{
     margin-top: 3em;
     width: 50%;
     position: absolute;
-    top: 20%;
+    top: 30%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%) 

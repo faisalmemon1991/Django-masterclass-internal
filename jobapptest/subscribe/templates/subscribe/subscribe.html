@@ -1,94 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="{% static 'subscribe/main.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscribe Form</title>
-</head>
-<body>
-    
-    <h1><img src="{% static 'subscribe/email-icon.png' %}" alt="subscribe" width="20px">Subscribe Form</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Submit">
-    </form>
-
-    <button onclick="popup()">Click me</button>
-    <script src="{% static 'main.js' %}"></script>
-
-<!-- <form method="POST">
-    {% for field in form %}
-    <div class="subscribe_field">
-        {{ field.errors }}
-        {{ field.label_tag }} 
-        {{ field }}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'app/style.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <title>View job</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="container">
+          <div class="logo">
+            <img src="{% static 'app/logo.svg' %}" alt="" />
+          </div>
+          <div class="links">
+            <a href="{% url 'jobs_home' %}">Home</a>
+          </div>
+          <span class="material-icons menu" onclick="menu()"> menu </span>
+        </div>
+      </nav>
+    </header>
+    <section>
+      <div class="container">
+          <div class="email-form">
+            <p class="email-form-title">Stay updated with us!</p>
+            <p class="email-form-title-success">You are subscribed</p>
+        <input type="text" class="enter-email" placeholder="Enter your email" />
+        <button class="email-submit">Submit</button>
     </div>
-    {% endfor %}
-    <input type="submit" value="Submit">
-</form>
-
-<form method="POST">
-    {% for field in form %}
-    <div class="subscribe_field">
-        {{field.errors}}
-        <label for="{{field.id_for_label}}">
-            {{field.label}}
-        </label>
-        {{field}}
-    </div>
-    {% endfor %}
-    <input type="submit" value="Submit">
-</form> -->
-    <!-- <form method="POST">
-        {% csrf_token %}
-        <div class="subscribe_field">
-            {{form.first_name.errors}}
-            <label for="{{form.first_name.id_for_label}}">{{form.first_name.label}}</label>
-            {{form.first_name}}
-        </div>
-
-        <div class="subscribe_field">
-            {{form.last_name.errors}}
-            <label for="{{form.last_name.id_for_label}}">Last Name</label>
-            {{form.last_name}}
-        </div>
-
-        <div class="subscribe_field">
-            {{form.email.errors}}
-            <label for="{{form.email.id_for_label}}">Email</label>
-            {{form.email}}
-        </div>
-        
-        <input type="submit" value="Submit">
-    
-      </form> -->
-
-    <!-- <form method="POST">
-        {% csrf_token %}
-        {{form.as_ul}}
-        <input type="submit" value="Submit">
-    </form> -->
-    <!-- <form method="POST">
-        {% csrf_token %}
-        {% if email_error_empty %}
-            <p>{{email_error_empty}}</p>
-        {% endif %}
-        <label for="f_name">First Name</label>
-        <input type="text" id="f_name" name="firstname" placeholder="Your First Name" required>
-    
-        <label for="l_name">Last Name</label>
-        <input type="text" id="l_name" name="lastname" placeholder="Your Last Name" required>
-    
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Your Email" required>
-    
-        <input type="submit" value="Submit">
-    
-      </form> -->
-    
-</body>
+      </div>
+    </section>
+    <script src="{% static 'app/app.js' %}"></script>
+  </body>
 </html>

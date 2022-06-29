@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -22,6 +23,11 @@ class Post(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='images/')
     view_count = models.IntegerField(null=True, blank=True)
     like_count = models.IntegerField(null=True, blank=True)
+
+    def save(self, *args,**kwargs):
+        if not self.id:
+            self.slug = slugify(self.title)
+        return super(Post, self).save(*args, **kwargs)
 
 class Comments(models.Model):
     title=models.CharField(max_length=200)
