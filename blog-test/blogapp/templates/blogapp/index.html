@@ -102,11 +102,11 @@
         <div class="grid-3">
           {% for blog in top_blogs %}
           <!-- card -->
-          <a href="#">
+          <a href="{% url 'post_page' blog.slug %}">
             <div class="card">
               <div class="post-img">
                 <img src="{{blog.image.url}}" alt="" />
-                <div class="tag">{{blog.tags.name}}</div>
+                <div class="tag">{{blog.tags.all.0.name}}</div>
               </div>
               <div class="card-content">
                 <h3>
@@ -117,8 +117,8 @@
                     <img src="{% static 'images/person1.svg' %}" alt="" />
                   </div>
                   <div class="details">
-                    <p>{{blog.author.name}}</p>
-                    <small>{{blog.last_updated}}</small>
+                    <p>{{blog.author.first_name}}</p>
+                    <small>{{blog.last_updated|date}}</small>
                   </div>
                 </div>
               </div>
