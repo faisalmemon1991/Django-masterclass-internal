@@ -2,9 +2,13 @@
 {% block title %}Blog | Logged out{% endblock %}
 
 {% block content %}
-<center>
+
 <div class="container">
+    <center>
+        <div class="typo">
     <p> You have been successfully logged out. <a href="{% url 'login' %}">Login again</a></p>
-</div>
+        </div>
 </center>
+</div>
+
 {% endblock %}

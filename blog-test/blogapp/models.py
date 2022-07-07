@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
@@ -7,14 +8,32 @@ from django.utils.text import slugify
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField()
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def save(self, *args,**kwargs):
+        if not self.id:
+            self.slug = slugify(self.user.username)
+        return super(Profile, self).save(*args, **kwargs)
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def save(self, *args,**kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        return super(Tag, self).save(*args, **kwargs)
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def save(self, *args,**kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        return super(Category, self).save(*args, **kwargs)
 
 class Post(models.Model):
     title=models.CharField(max_length=200)
@@ -27,6 +46,7 @@ class Post(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='images/')
     view_count = models.IntegerField(null=True, blank=True)
     like_count = models.IntegerField(null=True, blank=True)
+    is_featured = models.BooleanField()
 
     def save(self, *args,**kwargs):
         if not self.id:
@@ -34,9 +54,13 @@ class Post(models.Model):
         return super(Post, self).save(*args, **kwargs)
 
 class Comments(models.Model):
-    title=models.CharField(max_length=200)
     content = models.TextField()
+    date = models.DateTimeField(auto_now= True)
     post = models.ForeignKey(Post, on_delete= models.CASCADE)
+    author = models.ForeignKey(User, on_delete= models.CASCADE, null=True, blank=True)
+    name=models.CharField(max_length=200)
+    email=models.CharField(max_length=200) 
+    website=models.CharField(max_length=200, blank=True, null=True)
 
 
 class Bookmark(models.Model):
