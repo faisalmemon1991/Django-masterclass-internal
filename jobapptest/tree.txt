@@ -1,0 +1,96 @@
+├── .ebextensions
+│   ├── django.config
+├── app
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── __init__.py
+│   ├── models.py
+│   ├── static
+│   │   └── app
+│   │       ├── app.js
+│   │       ├── logo.svg
+│   │       └── style.css
+│   ├── templates
+│   │   └── app
+│   │       ├── hello.html
+│   │       ├── index.html
+│   │       └── job_detail.html
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── db.sqlite3
+├── env
+│   ├── All Virtual env related files
+├── images
+│   ├── Photo_on_5-9-14_at_2.31_PM.jpg
+│   ├── Photo_on_5-9-14_at_2.32_PM.jpg
+│   └── Photo_on_5-9-14_at_2.32_PM_v4McLzE.jpg
+├── myproject-test
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── requirements.txt
+├── staticfiles
+│   |-- All static files collected using collectstatic
+│   ├── app
+│   │   ├── app.js
+│   │   ├── logo.svg
+│   │   └── style.css
+│   └── subscribe
+│       ├── email-icon.png
+│       ├── main.css
+│       └── main.js
+├── subscribe
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── form.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_subscribe_option_alter_subscribe_email_and_more.py
+│   │   ├── 0003_alter_subscribe_option.py
+│   ├── models.py
+│   ├── static
+│   │   └── subscribe
+│   │       ├── email-icon.png
+│   │       ├── main.css
+│   │       └── main.js
+│   ├── templates
+│   │   └── subscribe
+│   │       ├── subscribe.html
+│   │       └── thank_you.html
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── templates
+│   └── base.html
+├── upload
+│   └── images
+│       ├── Photo_on_5-9-14_at_2.31_PM.jpg
+│       └── Photo_on_5-9-14_at_2.31_PM_3.jpg
+└── uploads
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── forms.py
+    ├── images
+    │   └── Photo_on_5-9-14_at_2.31_PM_3.jpg
+    ├── migrations
+    │   ├── 0001_initial.py
+    │   ├── 0002_uploadfile.py
+    │   ├── 0003_alter_uploadfile_file.py
+    │   ├── __init__.py
+    ├── models.py
+    ├── templates
+    │   └── uploads
+    │       ├── add_file.html
+    │       └── add_image.html
+    ├── tests.py
+    ├── urls.py
+    └── views.py
