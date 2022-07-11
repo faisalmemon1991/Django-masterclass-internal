@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-zx%coq1bty(8pi)-h-$n#6&##4gnvrqba14#=a@)u1ypb9^&ko
 DEBUG = getenv("IS_DEVELOPMENT", True)
 
 ALLOWED_HOSTS = [
-    getenv("APP_HOST")
+    getenv("APP_HOST"),
+    "0.0.0.0"
 ]
 
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
