@@ -61,6 +61,7 @@ class Comments(models.Model):
     name=models.CharField(max_length=200)
     email=models.CharField(max_length=200) 
     website=models.CharField(max_length=200, blank=True, null=True)
+    parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, null=True, blank=True, related_name='replies')
 
 
 class Bookmark(models.Model):

@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('app.urls')),
     path('subscribe/', include('subscribe.urls')),
     path('uploads/', include('uploads.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
