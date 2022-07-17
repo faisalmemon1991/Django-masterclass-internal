@@ -9,7 +9,7 @@
         <div class="page-top">
           <div class="top flex">
             <div class="page-name">
-              <a href="{% url 'index' %}" class="learn">
+              <a href="{{request.META.HTTP_REFERER}}" class="learn">
                 <span class="material-icons"> keyboard_return </span> Go
                 back
               </a>
@@ -58,13 +58,42 @@
                 <div class="social-share">
                   <div class="reactions">
                     <div class="likes">
-                      <i class="uil uil-heart"></i> <span>200</span>
+                      {% if user.is_authenticated %}
+                      <form action="{% url 'like_post' post.slug %}" method="POST">
+                        {% csrf_token %}
+                      {% if post_is_liked %}
+                        <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-info">Unlike</button>
+                      {% else %}
+                        <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-info"><i class="uil uil-heart"></i></button>
+                      {% endif %}
+                      </form>
+                      {% else %}
+                    <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this post</a><br>
+                {% endif %}
+                      <span>{{ number_of_likes }}</span>
                     </div>
                     <div class="total-comments">
                       <i class="uil uil-comment-alt"></i>
                       <span>10</span>
                     </div>
                   </div>
+{% comment %} 
+                  {% if user.is_authenticated %}
+                  <form action="{% url 'blogpost_like' object.id %}" method="POST">
+                  {% csrf_token %}
+
+                  {% if post_is_liked %}
+                  <button type="submit" name="blogpost_id" value="{{object.id}}" class="btn btn-info">Unlike</button>
+                  {% else %}
+                  <button type="submit" name="blogpost_id" value="{{object.id}}" class="btn btn-info">Like</button>
+                  {% endif %}
+                  </form>
+                {% else %}
+                  <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
+                {% endif %}
+                <strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
+   {% endcomment %}
+
                   <div class="share">
                     <div class="social">
                       <a href="#">
@@ -82,26 +111,24 @@
                     </div>
                   </div>
                 </div>
+
+                {% for comment in comments  %}
                 <!-- comments -->
                 <div class="user-comment">
                   <div class="author">
                     <div class="profile-pic">
-                      <img src="../images/author.svg" alt="" />
+                      <img src="{{comment.author.profile.profile_image.url}}" alt="" />
                     </div>
                     <div class="details">
-                      <p>Author name</p>
-                      <small>June 20, 2022</small>
+                      <p>{{comment.author.first_name}}</p>
+                      <small>{{comment.date|date}}</small>
                     </div>
                   </div>
                   <div class="comment-sec-main">
                     <div class="comment-sec">
                       <div class="comment">
                         <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Tempora magnam minima harum, dignissimos
-                          ipsa vero sequi ipsam, distinctio quisquam quo
-                          cupiditate sed recusandae expedita quod iste
-                          maiores rerum. Eaque, dignissimos.
+                          {{comment.content}}
                         </p>
                       </div>
                       <div class="reply">
@@ -109,89 +136,58 @@
                         <a href="#">Reply</a>
                       </div>
                     </div>
+
+                    <div class="comment-box">
+                      <h3>Reply to post</h3>
+                      <p>
+                        Your email address will not be published. Required fields
+                        are marked<span>*</span>
+                      </p>
+                      <form method="POST">
+                        {% csrf_token %}
+                        {{form.content}}
+                        <div class="grid-3">
+                          <input type="hidden" name="post_id" value="{{post.id}}">
+                          <input type="hidden" name="parent" id="parent" value="{{comment.id}}">
+                          {{form.name}}
+                          {{form.email}}
+                          {{form.website}}
+                        </div>
+        
+                        <button class="btn btn-primary rounded">
+                          Post Reply
+                        </button>
+                      </form>
+                    </div>
+                    
+
+                {% for reply in comment.replies.all %}
                     <div class="public-reply">
                       <div class="author">
                         <div class="profile-pic">
                           <img src="../images/author.svg" alt="" />
                         </div>
                         <div class="details">
-                          <p>Author name</p>
-                          <small>June 20, 2022</small>
+                          <p>{{reply.author.first_name}}</p>
+                          <small>{{reply.date|date}}</small>
                         </div>
                       </div>
                       <div class="comment">
                         <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Tempora magnam minima harum, dignissimos
+                          {{reply.content}}
                         </p>
                       </div>
-                      <div class="reply">
+                      {% comment %} <div class="reply">
                         <a href="#"><i class="uil uil-heart"></i></a>
                         <a href="#">Reply</a>
-                      </div>
+                      </div> {% endcomment %}
                     </div>
+                {% endfor %}
                   </div>
                 </div>
-                <!-- user comment -->
-                <div class="user-comment">
-                  <div class="author">
-                    <div class="profile-pic">
-                      <img src="../images/author.svg" alt="" />
-                    </div>
-                    <div class="details">
-                      <p>Author name</p>
-                      <small>June 20, 2022</small>
-                    </div>
-                  </div>
-                  <div class="comment-sec-main">
-                    <div class="comment-sec">
-                      <div class="comment">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Tempora magnam minima harum, dignissimos
-                          ipsa vero sequi ipsam, distinctio quisquam quo
-                          cupiditate sed recusandae expedita quod iste
-                          maiores rerum. Eaque, dignissimos.
-                        </p>
-                      </div>
-                      <div class="reply">
-                        <a href="#"><i class="uil uil-heart"></i></a>
-                        <a href="#">Reply</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- user comment end -->
-                <!-- user comment -->
-                <div class="user-comment">
-                  <div class="author">
-                    <div class="profile-pic">
-                      <img src="../images/author.svg" alt="" />
-                    </div>
-                    <div class="details">
-                      <p>Author name</p>
-                      <small>June 20, 2022</small>
-                    </div>
-                  </div>
-                  <div class="comment-sec-main">
-                    <div class="comment-sec">
-                      <div class="comment">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Tempora magnam minima harum, dignissimos
-                          ipsa vero sequi ipsam, distinctio quisquam quo
-                          cupiditate sed recusandae expedita quod iste
-                          maiores rerum. Eaque, dignissimos.
-                        </p>
-                      </div>
-                      <div class="reply">
-                        <a href="#"><i class="uil uil-heart"></i></a>
-                        <a href="#">Reply</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- user comment end -->
+                {% empty %}
+<h4>There are no comments yet.</h4>
+                {% endfor %}
               </div>
             </div>
             <div class="comment-box">
@@ -202,17 +198,10 @@
               </p>
               <form method="POST">
                 {% csrf_token %}
-                {% comment %} <textarea placeholder="Type your comment...."></textarea>
-                <div class="grid-3">
-                  <input type="text" placeholder="Name" />
-                  <input type="temail" placeholder="Email" />
-                  <input type="url" placeholder="Website (optional)" />
-                </div> {% endcomment %}
-                {% comment %} {{form}} {% endcomment %}
-
                 {{form.content}}
                 <div class="grid-3">
-                  <input type="hidden" name="post" id="id_post" value={{post}}>
+                  <input type="hidden" name="post_id" value="{{post.id}}">
+                  {% comment %} <input type="hidden" name="post" id="id_post" value={{post}}> {% endcomment %}
                   {{form.name}}
                   {{form.email}}
                   {{form.website}}

@@ -12,10 +12,17 @@
             </a>
           </div>
           <div class="typo">
-            <h1 class="title">The Super Blog!</h1>
+            {% if website_info %}
+              <h1 class="title">{{website_info.title}}</h1>
+            {% else %}
+              <h1 class="title">Super Blog!</h1>
+            {% endif %}
             <p>
-              Lorem ipsum began as scrambled, nonsensical Latin derived from
-              Cicero's 1st-century BC text De Finibus Bonorum et Malorum.
+              {% if website_info.description %}
+                {{website_info.description}}
+              {% else %}
+                This is an example description
+              {% endif %}
             </p>
           </div>
           <div class="newslatter">
@@ -55,9 +62,9 @@
 
     <section class="sp">
       <div class="container">
-        <h1 class="sec-title">Top blogs</h1>
+        <h1 class="sec-title">Top Posts</h1>
         <div class="grid-3">
-          {% for blog in top_blogs %}
+          {% for blog in top_posts %}
           <!-- card -->
           <a href="{% url 'post_page' blog.slug %}">
             <div class="card">
@@ -93,10 +100,10 @@
     </section>
     <section class="sp">
       <div class="container">
-        <h1 class="sec-title">New blogs</h1>
+        <h1 class="sec-title">New Posts</h1>
         <div class="grid-3">
 
-          {% for blog in recent_blogs %}
+          {% for blog in recent_posts %}
           <!-- card -->
           <a href="{% url 'post_page' blog.slug %}">
             <div class="card">

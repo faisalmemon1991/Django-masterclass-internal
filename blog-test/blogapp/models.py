@@ -45,13 +45,17 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name='post_tags')
     image = models.ImageField(null=True, blank=True, upload_to='images/')
     view_count = models.IntegerField(null=True, blank=True)
-    like_count = models.IntegerField(null=True, blank=True)
+    # like_count = models.IntegerField(null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name='post_like')
     is_featured = models.BooleanField()
 
     def save(self, *args,**kwargs):
         if not self.id:
             self.slug = slugify(self.title)
         return super(Post, self).save(*args, **kwargs)
+
+    def number_of_likes(self):
+        return self.likes.count()
 
 class Comments(models.Model):
     content = models.TextField()
@@ -63,7 +67,16 @@ class Comments(models.Model):
     website=models.CharField(max_length=200, blank=True, null=True)
     parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, null=True, blank=True, related_name='replies')
 
-
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     posts = models.ManyToManyField(Post)
+
+# class LikedPosts(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     posts = models.ManyToManyField(Post)
+
+
+class WebsiteMeta(models.Model):
+    title=models.CharField(max_length=200)
+    description=models.CharField(max_length=500)
+    about = models.TextField()
