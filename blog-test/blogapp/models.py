@@ -46,7 +46,8 @@ class Post(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='images/')
     view_count = models.IntegerField(null=True, blank=True)
     # like_count = models.IntegerField(null=True, blank=True)
-    likes = models.ManyToManyField(User, related_name='post_like')
+    likes = models.ManyToManyField(User, related_name='post_like', default=None, blank=True)
+    bookmarks = models.ManyToManyField(User, related_name="bookmarks", default=None, blank=True)
     is_featured = models.BooleanField()
 
     def save(self, *args,**kwargs):
@@ -67,9 +68,9 @@ class Comments(models.Model):
     website=models.CharField(max_length=200, blank=True, null=True)
     parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, null=True, blank=True, related_name='replies')
 
-class Bookmark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    posts = models.ManyToManyField(Post)
+# class Bookmark(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     posts = models.ManyToManyField(Post)
 
 # class LikedPosts(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)

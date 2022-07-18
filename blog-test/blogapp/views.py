@@ -1,11 +1,14 @@
+from django import forms
 from django.shortcuts import redirect, render
 from blogapp.form import CommentForm
-from blogapp.models import Bookmark, Comments, Post, Tag, WebsiteMeta
+from blogapp.models import Comments, Post, Tag, WebsiteMeta
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from blogapp.form import NewUserForm
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -62,6 +65,12 @@ def post_page(request, slug):
     number_of_likes = post.number_of_likes()
     post_is_liked = liked
 
+    # Bookmark logic
+    bookmarked = False
+    if post.bookmarks.filter(id=request.user.id).exists():
+        bookmarked = True
+    is_bookmarked = bookmarked
+
     # How can you exclude current post from recent
     recent_posts = Post.objects.all().order_by('-last_updated')[0:3]
 
@@ -72,7 +81,7 @@ def post_page(request, slug):
     comments = Comments.objects.filter(post=post, parent=None)
     replies= Comments.objects.filter(post=post).exclude(parent=None)
 
-    context = {'post':post,'recent_posts':recent_posts, 'related_posts':related_posts, 'tags':tags, 'form':form,'comments':comments, 'number_of_likes':number_of_likes, 'post_is_liked':post_is_liked}
+    context = {'post':post,'recent_posts':recent_posts, 'related_posts':related_posts, 'tags':tags, 'form':form,'comments':comments, 'number_of_likes':number_of_likes, 'post_is_liked':post_is_liked, 'is_bookmarked':is_bookmarked}
     return render(request, 'blogapp/post.html', context)  
 
 
@@ -84,7 +93,10 @@ def loginUser(request):
         if user is not None:
             login(request, user)
             return redirect('index')
-    return render(request, 'blogapp/login.html')
+        else:
+            messages.error(request, 'Username and passwords do not match')
+
+    return render(request, 'registration/login.html')
 
 
 def search_posts(request):
@@ -101,6 +113,11 @@ def all_posts(request):
     context = {'all_posts':all_posts}
     return render(request, 'blogapp/all_posts.html', context)
 
+def all_liked_posts(request):
+    all_liked_posts = Post.objects.filter(likes=request.user)
+    context = {'all_liked_posts':all_liked_posts}
+    return render(request, 'blogapp/all_liked_posts.html', context)
+
 def like_post(request, slug):
     print(request.POST.get('post_id'))
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
@@ -111,10 +128,19 @@ def like_post(request, slug):
     return HttpResponseRedirect(reverse('post_page', args=[str(slug)]))
 
 
-def bookmark(request):
-    liked_posts = Bookmark.objects.all(user=request.user)
-    context = {'liked_posts':liked_posts}
-    return render(request, 'blogapp/liked_posts.html', context)
+def all_bookmarked_posts(request):
+    all_bookmarked_posts = Post.objects.filter(bookmarks=request.user)
+    context = {'all_bookmarked_posts':all_bookmarked_posts}
+    return render(request, 'blogapp/all_bookmarked_posts.html', context)
+
+def bookmark_post(request, slug):
+    print("PRINT ", request.POST.get('post_id'))
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if post.bookmarks.filter(id=request.user.id).exists():
+        post.bookmarks.remove(request.user)
+    else:
+        post.bookmarks.add(request.user)
+    return HttpResponseRedirect(reverse('post_page', args=[str(slug)]))
 
 def about(request):
     website_info = None
@@ -127,7 +153,10 @@ def about(request):
 
 def tag_page(request, slug):
     tag = Tag.objects.get(slug = slug)
-    posts = Post.objects.get(tags__in = [tag.id])
+    posts = Post.objects.filter(tags__in = [tag.id])
+
+    top_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-view_count')
+    recent_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-last_updated')
 
     # # How can you exclude current post from recent
     # recent_posts = Post.objects.all().order_by('-last_updated')[0:3]
@@ -135,6 +164,19 @@ def tag_page(request, slug):
     # # Related posts are posts which are by same author excluding the existing post that is loaded
     # related_posts = Post.objects.filter()[0:3]
 
-    # tags = Tag.objects.all()
-    context = {'tag':tag, 'posts':posts}
+    tags = Tag.objects.all()
+    context = {'tag':tag, 'posts':posts,'top_posts':top_posts,'recent_posts':recent_posts,'tags':tags}
     return render(request, 'blogapp/tag.html', context)  
+
+
+
+def register_user(request):
+    form = NewUserForm()
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            print("Form valid")
+            return redirect("/")
+    return render (request=request, template_name="registration/registration.html", context={"register_form":form})

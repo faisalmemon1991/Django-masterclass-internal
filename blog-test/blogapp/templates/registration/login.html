@@ -8,6 +8,18 @@
             <div class="logo f-logo">
               <i class="fa-brands fa-blogger"></i>
             </div>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="notification">
+            <center>
+            <p class="txt alert-{{message.tags}}">{{message}}</p>
+            </center>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
             <div class="inputs">
               <div class="search-bar s-active input">
                 <input type="text" placeholder="Username" name="username"/>
@@ -16,7 +28,7 @@
                 </div>
               </div>
               <div class="search-bar s-active input">
-                <input type="tpassword" placeholder="Password" name="password"/>
+                <input type="password" placeholder="Password" name="password"/>
                 <div class="animated-search">
                   <i class="uil uil-key-skeleton"></i>
                 </div>
