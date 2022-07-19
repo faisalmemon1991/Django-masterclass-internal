@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import redirect, render
-from blogapp.form import CommentForm
+from blogapp.form import CommentForm, SubscribeForm
 from blogapp.models import Comments, Post, Tag, WebsiteMeta
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
@@ -12,6 +12,8 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
+    subscribe_form = SubscribeForm()
+    subscribe_successful = None
     top_posts = Post.objects.all().order_by('-view_count')
     recent_posts = Post.objects.all().order_by('-last_updated')
     featured_blog = Post.objects.filter(is_featured = True)
@@ -22,10 +24,19 @@ def index(request):
     if featured_blog:
         featured_blog = featured_blog[0]
 
+    if request.POST:
+        subscribe_form = SubscribeForm(request.POST)
+        if subscribe_form.is_valid():
+            subscribe_form.save()
+            subscribe_successful = 'Subscribed successfully'
+            subscribe_form = SubscribeForm()
+
     context = {'top_posts': top_posts, 
                 'recent_posts': recent_posts,
                 'featured_blog':featured_blog,
-                'website_info':website_info}
+                'website_info':website_info,
+                'form':subscribe_form,
+                'subscribe_successful':subscribe_successful}
     return render(request, 'blogapp/index.html', context)  
 
 
@@ -180,3 +191,12 @@ def register_user(request):
             print("Form valid")
             return redirect("/")
     return render (request=request, template_name="registration/registration.html", context={"register_form":form})
+
+
+
+def subscribe(request):
+    subscribe_form = SubscribeForm()
+
+            # return redirect(reverse('thank_you'))
+    context={"form":subscribe_form}
+    return render(request,"subscribe/subscribe.html",context)

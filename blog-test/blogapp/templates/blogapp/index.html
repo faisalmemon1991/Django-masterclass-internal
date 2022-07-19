@@ -26,8 +26,15 @@
             </p>
           </div>
           <div class="newslatter">
-            <input type="text" placeholder="Your email" />
+            {% comment %} <input type="text" placeholder="Your email" /> {% endcomment %}
+            <form method="POST">
+              {% csrf_token %}
+            {{form}}
             <button class="btn btn-primary">Subscribe</button>
+            {% if subscribe_successful %}
+              <p>Subscribed successfully</p>
+            {% endif %}
+            </form>
           </div>
         </center>
       </div>

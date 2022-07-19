@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from blogapp.models import Comments
+from blogapp.models import Comments, Subscribe
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -69,3 +69,15 @@ class NewUserForm(UserCreationForm):
     #         self.cleaned_data['password1']  
     #     )  
     #     return user 
+
+class SubscribeForm(forms.ModelForm):
+    class Meta:
+        model=Subscribe
+        fields = '__all__'
+        # exclude= ('first_name',)
+        labels = {'email': _('')}
+
+    def __init__(self, *args, **kwargs):
+        super(SubscribeForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs['placeholder'] = 'Enter your email'
