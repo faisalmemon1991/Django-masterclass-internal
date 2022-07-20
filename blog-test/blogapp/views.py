@@ -1,7 +1,8 @@
+from multiprocessing import context
 from django import forms
 from django.shortcuts import redirect, render
 from blogapp.form import CommentForm, SubscribeForm
-from blogapp.models import Comments, Post, Tag, WebsiteMeta
+from blogapp.models import Comments, Post, Profile, Tag, WebsiteMeta
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
@@ -9,13 +10,15 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from blogapp.form import NewUserForm
 from django.contrib import messages
+from django.db.models import Count
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
     subscribe_form = SubscribeForm()
     subscribe_successful = None
-    top_posts = Post.objects.all().order_by('-view_count')
-    recent_posts = Post.objects.all().order_by('-last_updated')
+    top_posts = Post.objects.all().order_by('-view_count')[0:3]
+    recent_posts = Post.objects.all().order_by('-last_updated')[0:3]
     featured_blog = Post.objects.filter(is_featured = True)
     website_info = None
     if WebsiteMeta.objects.all().exists():
@@ -35,7 +38,7 @@ def index(request):
                 'recent_posts': recent_posts,
                 'featured_blog':featured_blog,
                 'website_info':website_info,
-                'form':subscribe_form,
+                'subscribe_form':subscribe_form,
                 'subscribe_successful':subscribe_successful}
     return render(request, 'blogapp/index.html', context)  
 
@@ -88,11 +91,14 @@ def post_page(request, slug):
     # Related posts are posts which are by same author excluding the existing post that is loaded
     related_posts = Post.objects.filter()[0:3]
 
+    # Getting top authors
+    top_authors = User.objects.annotate(number=Count('post')).order_by('-number')
+
     tags = Tag.objects.all()
     comments = Comments.objects.filter(post=post, parent=None)
     replies= Comments.objects.filter(post=post).exclude(parent=None)
 
-    context = {'post':post,'recent_posts':recent_posts, 'related_posts':related_posts, 'tags':tags, 'form':form,'comments':comments, 'number_of_likes':number_of_likes, 'post_is_liked':post_is_liked, 'is_bookmarked':is_bookmarked}
+    context = {'post':post,'recent_posts':recent_posts, 'related_posts':related_posts, 'tags':tags, 'form':form,'comments':comments, 'number_of_likes':number_of_likes, 'post_is_liked':post_is_liked, 'is_bookmarked':is_bookmarked, 'top_authors':top_authors,'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/post.html', context)  
 
 
@@ -107,7 +113,9 @@ def loginUser(request):
         else:
             messages.error(request, 'Username and passwords do not match')
 
-    return render(request, 'registration/login.html')
+    context ={'subscribe_form':SubscribeForm()}
+
+    return render(request, 'registration/login.html', context)
 
 
 def search_posts(request):
@@ -116,17 +124,17 @@ def search_posts(request):
         search_query = request.GET.get('q')
     posts = Post.objects.filter(title__icontains = search_query)
     print(search_query)
-    context = {'posts':posts, 'search_query':search_query}
+    context = {'posts':posts, 'search_query':search_query, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/search.html', context)
 
 def all_posts(request):
     all_posts = Post.objects.all()
-    context = {'all_posts':all_posts}
+    context = {'all_posts':all_posts, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/all_posts.html', context)
 
 def all_liked_posts(request):
     all_liked_posts = Post.objects.filter(likes=request.user)
-    context = {'all_liked_posts':all_liked_posts}
+    context = {'all_liked_posts':all_liked_posts, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/all_liked_posts.html', context)
 
 def like_post(request, slug):
@@ -141,7 +149,7 @@ def like_post(request, slug):
 
 def all_bookmarked_posts(request):
     all_bookmarked_posts = Post.objects.filter(bookmarks=request.user)
-    context = {'all_bookmarked_posts':all_bookmarked_posts}
+    context = {'all_bookmarked_posts':all_bookmarked_posts, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/all_bookmarked_posts.html', context)
 
 def bookmark_post(request, slug):
@@ -158,7 +166,7 @@ def about(request):
     if WebsiteMeta.objects.all().exists():
         website_info = WebsiteMeta.objects.all()[0]
 
-    context = {'website_info':website_info}
+    context = {'website_info':website_info, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/about.html', context)
 
 
@@ -166,8 +174,8 @@ def tag_page(request, slug):
     tag = Tag.objects.get(slug = slug)
     posts = Post.objects.filter(tags__in = [tag.id])
 
-    top_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-view_count')
-    recent_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-last_updated')
+    top_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-view_count')[0:2]
+    recent_posts = Post.objects.filter(tags__in = [tag.id]).order_by('-last_updated')[0:3]
 
     # # How can you exclude current post from recent
     # recent_posts = Post.objects.all().order_by('-last_updated')[0:3]
@@ -176,7 +184,7 @@ def tag_page(request, slug):
     # related_posts = Post.objects.filter()[0:3]
 
     tags = Tag.objects.all()
-    context = {'tag':tag, 'posts':posts,'top_posts':top_posts,'recent_posts':recent_posts,'tags':tags}
+    context = {'tag':tag, 'posts':posts,'top_posts':top_posts,'recent_posts':recent_posts,'tags':tags, 'subscribe_form':SubscribeForm()}
     return render(request, 'blogapp/tag.html', context)  
 
 
@@ -200,3 +208,24 @@ def subscribe(request):
             # return redirect(reverse('thank_you'))
     context={"form":subscribe_form}
     return render(request,"subscribe/subscribe.html",context)
+
+
+def author_page(request, slug):
+    profile = Profile.objects.get(slug = slug)
+    posts = Post.objects.filter(author = profile.user)
+
+    top_posts = Post.objects.filter(author = profile.user).order_by('-view_count')[0:2]
+    recent_posts = Post.objects.filter(author = profile.user).order_by('-last_updated')[0:3]
+
+    # # How can you exclude current post from recent
+    # recent_posts = Post.objects.all().order_by('-last_updated')[0:3]
+
+    # # Related posts are posts which are by same author excluding the existing post that is loaded
+    # related_posts = Post.objects.filter()[0:3]
+
+    # Getting top authors
+    top_authors = User.objects.annotate(number=Count('post')).order_by('-number')
+
+    tags = Tag.objects.all()
+    context = {'profile':profile, 'posts':posts,'top_posts':top_posts,'recent_posts':recent_posts,'tags':tags, 'top_authors':top_authors, 'subscribe_form':SubscribeForm()}
+    return render(request, 'blogapp/author.html', context)  

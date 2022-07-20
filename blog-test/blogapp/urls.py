@@ -11,6 +11,7 @@ urlpatterns = [
     path("like_post/<slug:slug>", views.like_post, name="like_post"),
     path("about/", views.about, name="about"),
     path("tag/<slug:slug>", views.tag_page, name="tag_page"),
+    path("author/<slug:slug>", views.author_page, name="author_page"),
 
     path("all_bookmarked_posts/", views.all_bookmarked_posts, name="all_bookmarked_posts"),
     path("bookmark_post/<slug:slug>", views.bookmark_post, name="bookmark_post"),

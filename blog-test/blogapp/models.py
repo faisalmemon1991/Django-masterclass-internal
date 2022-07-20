@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
@@ -15,6 +14,11 @@ class Profile(models.Model):
             self.slug = slugify(self.user.username)
         return super(Profile, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.user.first_name
+
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -25,6 +29,9 @@ class Tag(models.Model):
             self.slug = slugify(self.name)
         return super(Tag, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -34,6 +41,9 @@ class Category(models.Model):
         if not self.id:
             self.slug = slugify(self.name)
         return super(Category, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     title=models.CharField(max_length=200)

@@ -29,7 +29,7 @@
             {% comment %} <input type="text" placeholder="Your email" /> {% endcomment %}
             <form method="POST">
               {% csrf_token %}
-            {{form}}
+            {{subscribe_form}}
             <button class="btn btn-primary">Subscribe</button>
             {% if subscribe_successful %}
               <p>Subscribed successfully</p>
